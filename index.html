@@ -1,0 +1,1753 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>사회복지사 사업관리 시스템</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            font-size: 12px;
+        }
+
+        .container {
+            max-width: 1800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+
+        .tabs {
+            display: flex;
+            background: #f5f5f5;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            background: #f5f5f5;
+            border: none;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .tab.active {
+            background: white;
+            color: #4facfe;
+            border-bottom: 2px solid #4facfe;
+        }
+
+        .tab:hover {
+            background: #e8f4fd;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .main-layout {
+            display: flex;
+            gap: 20px;
+            min-height: 800px;
+        }
+
+        .input-section {
+            flex: 1;
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #e0e0e0;
+        }
+
+        .summary-section {
+            flex: 1;
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #e0e0e0;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: white;
+            text-align: center;
+            background: #4facfe;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .form-section {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background: white;
+        }
+
+        .form-section-title {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #4facfe;
+        }
+
+        .input-form {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+
+        .form-group {
+            flex: 1;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #4facfe;
+            box-shadow: 0 0 5px rgba(79, 172, 254, 0.3);
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #4facfe, #00f2fe);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
+        }
+
+        .btn-edit {
+            background: #ffa500;
+            padding: 5px 10px;
+            font-size: 11px;
+        }
+
+        .btn-edit:hover {
+            background: #e69500;
+        }
+
+        .delete-btn {
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+
+        .delete-btn:hover {
+            background: #ff3742;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 11px;
+        }
+
+        .data-table th,
+        .data-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        .data-table th {
+            background: #4facfe;
+            color: white;
+            font-weight: bold;
+        }
+
+        .data-table tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        .data-table tr:hover {
+            background: #e8f4fd;
+        }
+
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 11px;
+        }
+
+        .summary-table th,
+        .summary-table td {
+            border: 1px solid #ddd;
+            padding: 6px;
+            text-align: center;
+            color: #000;
+        }
+
+        .summary-table th {
+            background: #f0f0f0;
+            font-weight: bold;
+        }
+
+        .summary-table .program-header {
+            background: #4facfe;
+            color: white;
+            font-weight: bold;
+        }
+
+        .summary-table .total-row {
+            background: #ffe6e6;
+            font-weight: bold;
+        }
+
+        .log-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        .log-section .section-title {
+            background: #764ba2;
+        }
+
+        .log-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 11px;
+        }
+
+        .log-table th,
+        .log-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        .log-table th {
+            background: #764ba2;
+            color: white;
+            font-weight: bold;
+        }
+
+        .log-table tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        .log-table tr:hover {
+            background: #f3e8fd;
+        }
+
+        .participant-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .participant-group .form-group {
+            flex: 1;
+        }
+
+        .save-status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #2ecc71;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: bold;
+            display: none;
+            z-index: 1000;
+        }
+
+        .btn-save {
+            background: #2ecc71;
+            margin-left: 10px;
+        }
+
+        .btn-save:hover {
+            background: #27ae60;
+        }
+
+        @media (max-width: 1200px) {
+            .main-layout {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="save-status" id="saveStatus">저장되었습니다!</div>
+
+    <div class="container">
+        <div class="header">
+            <h1>사회복지사 사업관리 시스템</h1>
+            <p>2025년 사업 운영 실적 및 예산 관리</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="app.switchTab('performance', this)">사업 운영 실적</button>
+            <button class="tab" onclick="app.switchTab('budget', this)">사업 예산 사용 내역</button>
+            <button class="tab" onclick="app.switchTab('settings', this)">설정</button>
+        </div>
+
+        <div id="performance" class="tab-content active">
+            <div class="main-layout">
+                <div class="input-section">
+                    <div class="section-title">사업 실적 입력</div>
+                    <div class="input-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>월</label>
+                                <select id="month">
+                                    <option value="">선택</option>
+                                    <option value="1">1월</option>
+                                    <option value="2">2월</option>
+                                    <option value="3">3월</option>
+                                    <option value="4">4월</option>
+                                    <option value="5">5월</option>
+                                    <option value="6">6월</option>
+                                    <option value="7">7월</option>
+                                    <option value="8">8월</option>
+                                    <option value="9">9월</option>
+                                    <option value="10">10월</option>
+                                    <option value="11">11월</option>
+                                    <option value="12">12월</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>일</label>
+                                <input type="number" id="day" min="1" max="31">
+                            </div>
+                            <div class="form-group">
+                                <label>사업명</label>
+                                <select id="program" onchange="app.updateActivities()">
+                                    <option value="">선택</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>세부활동</label>
+                                <select id="activity">
+                                    <option value="">선택</option>
+                                </select>
+                            </div>
+                            <div class="participant-group">
+                                <div class="form-group">
+                                    <label>수급자</label>
+                                    <input type="number" id="recipientCount" min="0" value="0">
+                                </div>
+                                <div class="form-group">
+                                    <label>일반</label>
+                                    <input type="number" id="generalCount" min="0" value="0">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <button class="btn" onclick="app.addPerformanceData()">추가</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="summary-section">
+                    <div class="section-title">사업별 실적 현황</div>
+                    <div id="performanceSummary"></div>
+
+                    <div class="section-title" style="margin-top: 30px;">월별 실적 현황</div>
+                    <div id="monthlyPerformance"></div>
+
+                    <div class="section-title" style="margin-top: 30px;">분기별 실적 현황</div>
+                    <div id="quarterlyPerformance"></div>
+                </div>
+            </div>
+
+            <div class="log-section">
+                <div class="section-title">입력된 사업 실적 로그</div>
+                <table class="log-table">
+                    <thead>
+                        <tr>
+                            <th>월</th>
+                            <th>일</th>
+                            <th>사업명</th>
+                            <th>세부활동</th>
+                            <th>수급자</th>
+                            <th>일반</th>
+                            <th>합계</th>
+                            <th>수정</th>
+                            <th>삭제</th>
+                        </tr>
+                    </thead>
+                    <tbody id="performanceLog">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="budget" class="tab-content">
+            <div class="main-layout">
+                <div class="input-section">
+                    <div class="section-title">예산 사용 내역 입력</div>
+                    <div class="input-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>월</label>
+                                <select id="budgetMonth">
+                                    <option value="">선택</option>
+                                    <option value="1">1월</option>
+                                    <option value="2">2월</option>
+                                    <option value="3">3월</option>
+                                    <option value="4">4월</option>
+                                    <option value="5">5월</option>
+                                    <option value="6">6월</option>
+                                    <option value="7">7월</option>
+                                    <option value="8">8월</option>
+                                    <option value="9">9월</option>
+                                    <option value="10">10월</option>
+                                    <option value="11">11월</option>
+                                    <option value="12">12월</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>일</label>
+                                <input type="number" id="budgetDay" min="1" max="31">
+                            </div>
+                            <div class="form-group">
+                                <label>사업명</label>
+                                <select id="budgetProgram" onchange="app.updateBudgetActivities()">
+                                    <option value="">선택</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>세부활동</label>
+                                <select id="budgetActivity" onchange="app.updateBudgetItems()">
+                                    <option value="">선택</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>사용내용(예산 항목)</label>
+                                <select id="budgetItem">
+                                    <option value="">선택</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>사용금액</label>
+                                <input type="number" id="budgetAmount" min="0">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <button class="btn" onclick="app.addBudgetData()">추가</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="summary-section">
+                    <div class="section-title">예산 사용 현황</div>
+                    <div id="budgetSummary"></div>
+
+                    <div class="section-title" style="margin-top: 30px;">월별 예산 사용 현황</div>
+                    <div id="monthlyBudget"></div>
+
+                    <div class="section-title" style="margin-top: 30px;">분기별 예산 사용 현황</div>
+                    <div id="quarterlyBudget"></div>
+                </div>
+            </div>
+
+            <div class="log-section">
+                <div class="section-title">입력된 예산 사용 로그</div>
+                <table class="log-table">
+                    <thead>
+                        <tr>
+                            <th>월</th>
+                            <th>일</th>
+                            <th>사업명</th>
+                            <th>세부활동</th>
+                            <th>사용내용</th>
+                            <th>사용금액</th>
+                            <th>수정</th>
+                            <th>삭제</th>
+                        </tr>
+                    </thead>
+                    <tbody id="budgetLog">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="settings" class="tab-content">
+            <div class="main-layout">
+                <div class="input-section">
+                    <div class="section-title">사업 계획 설정</div>
+
+                    <div class="form-section">
+                        <div class="form-section-title">목표 실적 입력</div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>사업명</label>
+                                <input type="text" id="targetProgram">
+                            </div>
+                            <div class="form-group">
+                                <label>세부활동명</label>
+                                <input type="text" id="targetActivity">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>목표 회기수</label>
+                                <input type="number" id="targetSessions" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label>목표 인원</label>
+                                <input type="number" id="targetParticipants" min="0">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <button class="btn" onclick="app.addTargetData()">목표 저장</button>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <div class="form-section-title">목표 예산 입력</div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>사업명</label>
+                                <input type="text" id="budgetProgramInput">
+                            </div>
+                            <div class="form-group">
+                                <label>세부활동명</label>
+                                <input type="text" id="budgetActivityInput">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>예산 항목</label>
+                                <input type="text" id="budgetItemInput">
+                            </div>
+                            <div class="form-group">
+                                <label>예산</label>
+                                <input type="number" id="budgetAmountInput" min="0">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <button class="btn" onclick="app.addBudgetPlan()">예산 저장</button>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <div class="form-section-title">데이터 백업 및 복원</div>
+                        <div class="form-row">
+                            <button class="btn" onclick="app.exportToCSV()">📤 CSV로 내보내기</button>
+                            <button class="btn" onclick="app.importFromCSV()">📥 CSV에서 가져오기</button>
+                        </div>
+                        <div class="form-row" style="margin-top: 10px;">
+                            <button class="btn" onclick="app.exportToGoogleSheets()" id="googleExportBtn">📤 구글 시트로
+                                내보내기</button>
+                            <button class="btn" onclick="app.importFromGoogleSheets()" id="googleImportBtn">📥 구글 시트에서
+                                가져오기</button>
+                        </div>
+                        <input type="file" id="csvFileInput" accept=".csv" style="display: none;"
+                            onchange="app.handleCSVFile(event)">
+                    </div>
+
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th colspan="5" style="background: #4facfe; color: white;">목표 실적 로그</th>
+                            </tr>
+                            <tr>
+                                <th>사업명</th>
+                                <th>세부활동명</th>
+                                <th>목표 회기수</th>
+                                <th>목표 인원</th>
+                                <th>수정/삭제</th>
+                            </tr>
+                        </thead>
+                        <tbody id="targetLog">
+                        </tbody>
+                    </table>
+
+                    <table class="data-table" style="margin-top: 20px;">
+                        <thead>
+                            <tr>
+                                <th colspan="5" style="background: #4facfe; color: white;">예산 계획 로그</th>
+                            </tr>
+                            <tr>
+                                <th>사업명</th>
+                                <th>세부활동명</th>
+                                <th>예산 항목</th>
+                                <th>예산</th>
+                                <th>수정/삭제</th>
+                            </tr>
+                        </thead>
+                        <tbody id="budgetPlanLog">
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="summary-section">
+                    <div class="section-title">설정된 사업 계획 요약</div>
+                    <div id="targetSummary"></div>
+                    <div id="budgetPlanSummary"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 앱 객체로 모든 기능을 묶어서 관리
+        const app = {
+            // 데이터 저장소
+            targetData: [],
+            budgetPlanData: [],
+            performanceData: [],
+            budgetData: [],
+
+            // 탭 전환 함수 - 수정된 버전
+            switchTab: function (tabName, element) {
+                document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+                element.classList.add('active');
+                document.getElementById(tabName).classList.add('active');
+
+                // 탭 전환 시 모든 데이터를 최신 상태로 업데이트
+                this.updateAllTables();
+                this.refreshAllTabData();
+            },
+
+            // 저장 기능
+            saveAllData: function () {
+                try {
+                    this.showSaveStatus();
+                    console.log('데이터가 성공적으로 저장되었습니다.');
+                } catch (error) {
+                    console.error('데이터 저장 중 오류가 발생했습니다:', error);
+                    alert('데이터 저장 중 오류가 발생했습니다.');
+                }
+            },
+
+            showSaveStatus: function () {
+                const saveStatus = document.getElementById('saveStatus');
+                saveStatus.style.display = 'block';
+                setTimeout(() => {
+                    saveStatus.style.display = 'none';
+                }, 2000);
+            },
+
+            autoSave: function () {
+                this.saveAllData();
+            },
+
+            // 목표 데이터 추가 - 수정된 버전
+            addTargetData: function () {
+                const program = document.getElementById('targetProgram').value.trim();
+                const activity = document.getElementById('targetActivity').value.trim();
+                const sessions = parseInt(document.getElementById('targetSessions').value) || 0;
+                const participants = parseInt(document.getElementById('targetParticipants').value) || 0;
+
+                if (!program || !activity) {
+                    alert('사업명과 세부활동명은 필수입니다.');
+                    return;
+                }
+
+                const existingIndex = this.targetData.findIndex(item =>
+                    item.program === program && item.activity === activity
+                );
+
+                if (existingIndex !== -1) {
+                    this.targetData[existingIndex].sessions = sessions;
+                    this.targetData[existingIndex].participants = participants;
+                } else {
+                    this.targetData.push({
+                        id: Date.now(),
+                        program,
+                        activity,
+                        sessions,
+                        participants
+                    });
+                }
+
+                this.clearTargetForm();
+                this.updateAllTables();
+                // 다른 탭들도 즉시 업데이트
+                this.refreshAllTabData();
+                this.autoSave();
+            },
+
+            // 예산 계획 추가 - 수정된 버전
+            addBudgetPlan: function () {
+                const program = document.getElementById('budgetProgramInput').value.trim();
+                const activity = document.getElementById('budgetActivityInput').value.trim();
+                const item = document.getElementById('budgetItemInput').value.trim();
+                const amount = parseInt(document.getElementById('budgetAmountInput').value) || 0;
+
+                if (!program || !activity || !item) {
+                    alert('사업명, 세부활동명, 예산 항목은 필수입니다.');
+                    return;
+                }
+
+                this.budgetPlanData.push({
+                    id: Date.now(),
+                    program,
+                    activity,
+                    item,
+                    amount
+                });
+
+                this.clearBudgetPlanForm();
+                this.updateAllTables();
+                // 다른 탭들도 즉시 업데이트
+                this.refreshAllTabData();
+                this.autoSave();
+            },
+
+            // 모든 탭 데이터 새로고침
+            refreshAllTabData: function () {
+                // 현재 활성화된 탭과 상관없이 모든 탭의 데이터를 업데이트
+                this.updatePerformanceSummary();
+                this.updateMonthlyPerformance();
+                this.updateQuarterlyPerformance();
+                this.updateBudgetSummary();
+                this.updateMonthlyBudget();
+                this.updateQuarterlyBudget();
+                this.updateTargetSummary();
+                this.updateBudgetPlanSummary();
+                console.log('모든 탭 데이터가 업데이트되었습니다.');
+            },
+
+            // 실적 데이터 추가
+            addPerformanceData: function () {
+                const month = parseInt(document.getElementById('month').value);
+                const day = parseInt(document.getElementById('day').value);
+                const program = document.getElementById('program').value;
+                const activity = document.getElementById('activity').value;
+                const recipients = parseInt(document.getElementById('recipientCount').value) || 0;
+                const general = parseInt(document.getElementById('generalCount').value) || 0;
+
+                if (!month || !day || !program || !activity) {
+                    alert('모든 필수 항목을 입력해주세요.');
+                    return;
+                }
+
+                this.performanceData.push({
+                    id: Date.now(),
+                    month,
+                    day,
+                    program,
+                    activity,
+                    recipients,
+                    general,
+                    total: recipients + general
+                });
+
+                this.clearPerformanceForm();
+                this.updateAllTables();
+                this.autoSave();
+            },
+
+            // 예산 사용 데이터 추가
+            addBudgetData: function () {
+                const month = parseInt(document.getElementById('budgetMonth').value);
+                const day = parseInt(document.getElementById('budgetDay').value);
+                const program = document.getElementById('budgetProgram').value;
+                const activity = document.getElementById('budgetActivity').value;
+                const item = document.getElementById('budgetItem').value;
+                const amount = parseInt(document.getElementById('budgetAmount').value) || 0;
+
+                if (!month || !day || !program || !activity || !item) {
+                    alert('모든 필수 항목을 입력해주세요.');
+                    return;
+                }
+
+                this.budgetData.push({
+                    id: Date.now(),
+                    month,
+                    day,
+                    program,
+                    activity,
+                    item,
+                    amount
+                });
+
+                this.clearBudgetForm();
+                this.updateAllTables();
+                this.autoSave();
+            },
+
+            // 폼 초기화 함수들
+            clearTargetForm: function () {
+                document.getElementById('targetProgram').value = '';
+                document.getElementById('targetActivity').value = '';
+                document.getElementById('targetSessions').value = '';
+                document.getElementById('targetParticipants').value = '';
+            },
+
+            clearBudgetPlanForm: function () {
+                document.getElementById('budgetProgramInput').value = '';
+                document.getElementById('budgetActivityInput').value = '';
+                document.getElementById('budgetItemInput').value = '';
+                document.getElementById('budgetAmountInput').value = '';
+            },
+
+            clearPerformanceForm: function () {
+                document.getElementById('month').value = '';
+                document.getElementById('day').value = '';
+                document.getElementById('program').value = '';
+                document.getElementById('activity').innerHTML = '<option value="">선택</option>';
+                document.getElementById('recipientCount').value = '0';
+                document.getElementById('generalCount').value = '0';
+            },
+
+            clearBudgetForm: function () {
+                document.getElementById('budgetMonth').value = '';
+                document.getElementById('budgetDay').value = '';
+                document.getElementById('budgetProgram').value = '';
+                document.getElementById('budgetActivity').innerHTML = '<option value="">선택</option>';
+                document.getElementById('budgetItem').innerHTML = '<option value="">선택</option>';
+                document.getElementById('budgetAmount').value = '';
+            },
+
+            // 프로그램 선택 옵션 업데이트
+            updateProgramSelects: function () {
+                const programs = [...new Set([...this.targetData, ...this.budgetPlanData].map(item => item.program))];
+
+                const programSelect = document.getElementById('program');
+                const budgetProgramSelect = document.getElementById('budgetProgram');
+
+                programSelect.innerHTML = '<option value="">선택</option>';
+                budgetProgramSelect.innerHTML = '<option value="">선택</option>';
+
+                programs.forEach(program => {
+                    programSelect.innerHTML += `<option value="${program}">${program}</option>`;
+                    budgetProgramSelect.innerHTML += `<option value="${program}">${program}</option>`;
+                });
+            },
+
+            // 활동 옵션 업데이트
+            updateActivities: function () {
+                const selectedProgram = document.getElementById('program').value;
+                const activitySelect = document.getElementById('activity');
+
+                activitySelect.innerHTML = '<option value="">선택</option>';
+
+                if (selectedProgram) {
+                    const activities = [...new Set([...this.targetData, ...this.budgetPlanData]
+                        .filter(item => item.program === selectedProgram)
+                        .map(item => item.activity))];
+
+                    activities.forEach(activity => {
+                        activitySelect.innerHTML += `<option value="${activity}">${activity}</option>`;
+                    });
+                }
+            },
+
+            updateBudgetActivities: function () {
+                const selectedProgram = document.getElementById('budgetProgram').value;
+                const activitySelect = document.getElementById('budgetActivity');
+
+                activitySelect.innerHTML = '<option value="">선택</option>';
+
+                if (selectedProgram) {
+                    const activities = [...new Set(this.budgetPlanData
+                        .filter(item => item.program === selectedProgram)
+                        .map(item => item.activity))];
+
+                    activities.forEach(activity => {
+                        activitySelect.innerHTML += `<option value="${activity}">${activity}</option>`;
+                    });
+                }
+            },
+
+            updateBudgetItems: function () {
+                const selectedProgram = document.getElementById('budgetProgram').value;
+                const selectedActivity = document.getElementById('budgetActivity').value;
+                const itemSelect = document.getElementById('budgetItem');
+
+                itemSelect.innerHTML = '<option value="">선택</option>';
+
+                if (selectedProgram && selectedActivity) {
+                    const items = this.budgetPlanData
+                        .filter(item => item.program === selectedProgram && item.activity === selectedActivity)
+                        .map(item => item.item);
+
+                    items.forEach(item => {
+                        itemSelect.innerHTML += `<option value="${item}">${item}</option>`;
+                    });
+                }
+            },
+
+            // 모든 테이블 업데이트
+            updateAllTables: function () {
+                this.updateProgramSelects();
+                this.updateTargetLog();
+                this.updateBudgetPlanLog();
+                this.updateTargetSummary();
+                this.updateBudgetPlanSummary();
+                this.updatePerformanceSummary();
+                this.updateMonthlyPerformance();
+                this.updateQuarterlyPerformance();
+                this.updateBudgetSummary();
+                this.updateMonthlyBudget();
+                this.updateQuarterlyBudget();
+                this.updatePerformanceLog();
+                this.updateBudgetLog();
+            },
+
+            // 목표 로그 업데이트
+            updateTargetLog: function () {
+                const tbody = document.getElementById('targetLog');
+                tbody.innerHTML = '';
+
+                this.targetData.forEach(item => {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${item.program}</td>
+                            <td>${item.activity}</td>
+                            <td>${item.sessions}</td>
+                            <td>${item.participants}</td>
+                            <td>
+                                <button class="btn-edit" onclick="app.editTarget(${item.id})">수정</button>
+                                <button class="delete-btn" onclick="app.deleteTarget(${item.id})">삭제</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            },
+
+            // 예산 계획 로그 업데이트
+            updateBudgetPlanLog: function () {
+                const tbody = document.getElementById('budgetPlanLog');
+                tbody.innerHTML = '';
+
+                this.budgetPlanData.forEach(item => {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${item.program}</td>
+                            <td>${item.activity}</td>
+                            <td>${item.item}</td>
+                            <td>${item.amount.toLocaleString()}원</td>
+                            <td>
+                                <button class="btn-edit" onclick="app.editBudgetPlan(${item.id})">수정</button>
+                                <button class="delete-btn" onclick="app.deleteBudgetPlan(${item.id})">삭제</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            },
+
+            // 목표 요약 업데이트
+            updateTargetSummary: function () {
+                const div = document.getElementById('targetSummary');
+                if (!this.targetData.length) {
+                    div.innerHTML = '';
+                    return;
+                }
+
+                const programs = [...new Set(this.targetData.map(item => item.program))];
+                let html = '<div class="form-section-title" style="margin-bottom: 15px;">목표 실적 계획</div>';
+
+                programs.forEach(program => {
+                    const programData = this.targetData.filter(item => item.program === program);
+                    let totalSessions = 0;
+                    let totalParticipants = 0;
+
+                    html += `
+                        <table class="summary-table">
+                            <thead>
+                                <tr class="program-header">
+                                    <th colspan="4">${program}</th>
+                                </tr>
+                                <tr>
+                                    <th>세부활동</th>
+                                    <th>목표 회기수</th>
+                                    <th>목표 인원</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+
+                    programData.forEach(item => {
+                        totalSessions += item.sessions;
+                        totalParticipants += item.participants;
+                        html += `
+                            <tr>
+                                <td>${item.activity}</td>
+                                <td>${item.sessions}</td>
+                                <td>${item.participants}</td>
+                                <td></td>
+                            </tr>
+                        `;
+                    });
+
+                    html += `
+                            <tr class="total-row">
+                                <td>총 계</td>
+                                <td>${totalSessions}</td>
+                                <td>${totalParticipants}</td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    `;
+                });
+
+                div.innerHTML = html;
+            },
+
+            // 예산 계획 요약 업데이트
+            updateBudgetPlanSummary: function () {
+                const div = document.getElementById('budgetPlanSummary');
+                if (!this.budgetPlanData.length) {
+                    div.innerHTML = '';
+                    return;
+                }
+
+                const programs = [...new Set(this.budgetPlanData.map(item => item.program))];
+                let html = '<div class="form-section-title" style="margin-bottom: 15px;">예산 계획</div>';
+
+                programs.forEach(program => {
+                    const programData = this.budgetPlanData.filter(item => item.program === program);
+                    const activities = [...new Set(programData.map(item => item.activity))];
+                    let totalBudget = 0;
+
+                    html += `
+                        <table class="summary-table">
+                            <thead>
+                                <tr class="program-header">
+                                    <th colspan="4">${program}</th>
+                                </tr>
+                                <tr>
+                                    <th>세부활동</th>
+                                    <th>예산 항목</th>
+                                    <th>예산</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+
+                    activities.forEach(activity => {
+                        const activityData = programData.filter(item => item.activity === activity);
+                        activityData.forEach((item, index) => {
+                            totalBudget += item.amount;
+                            html += `
+                                <tr>
+                                    ${index === 0 ? `<td rowspan="${activityData.length}">${activity}</td>` : ''}
+                                    <td>${item.item}</td>
+                                    <td>${item.amount.toLocaleString()}원</td>
+                                    <td></td>
+                                </tr>
+                            `;
+                        });
+                    });
+
+                    html += `
+                            <tr class="total-row">
+                                <td colspan="2">총 예산</td>
+                                <td>${totalBudget.toLocaleString()}원</td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    `;
+                });
+
+                div.innerHTML = html;
+            },
+
+            // 실적 요약 업데이트
+            updatePerformanceSummary: function () {
+                const div = document.getElementById('performanceSummary');
+                if (!this.performanceData.length) {
+                    div.innerHTML = '';
+                    return;
+                }
+
+                const programs = [...new Set(this.performanceData.map(item => item.program))];
+                let html = '';
+
+                programs.forEach(program => {
+                    const programPerformance = this.performanceData.filter(item => item.program === program);
+                    const activities = [...new Set(programPerformance.map(item => item.activity))];
+
+                    html += `
+                        <table class="summary-table">
+                            <thead>
+                                <tr class="program-header">
+                                    <th colspan="8">${program}</th>
+                                </tr>
+                                <tr>
+                                    <th rowspan="2">활동명</th>
+                                    <th rowspan="2">목표 회기수</th>
+                                    <th rowspan="2">실제 회기수</th>
+                                    <th rowspan="2">목표 인원</th>
+                                    <th colspan="3">실제 인원</th>
+                                    <th rowspan="2">달성률</th>
+                                </tr>
+                                <tr>
+                                    <th>총합</th>
+                                    <th>수급</th>
+                                    <th>일반</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+
+                    let totalTargetSessions = 0;
+                    let totalActualSessions = 0;
+                    let totalTargetParticipants = 0;
+                    let totalActualParticipants = 0;
+                    let totalRecipients = 0;
+                    let totalGeneral = 0;
+
+                    activities.forEach(activity => {
+                        const activityPerformance = programPerformance.filter(item => item.activity === activity);
+                        const actualSessions = activityPerformance.length;
+                        const actualParticipants = activityPerformance.reduce((sum, item) => sum + item.total, 0);
+                        const recipients = activityPerformance.reduce((sum, item) => sum + item.recipients, 0);
+                        const general = activityPerformance.reduce((sum, item) => sum + item.general, 0);
+
+                        // 현재 목표 데이터에서 최신 값을 가져옴
+                        const targetItem = this.targetData.find(item => item.program === program && item.activity === activity);
+                        const targetSessions = targetItem ? targetItem.sessions : 0;
+                        const targetParticipants = targetItem ? targetItem.participants : 0;
+
+                        // 달성률을 회기수와 인원 모두 고려하여 계산
+                        let achievementRate = 0;
+                        if (targetSessions > 0 && targetParticipants > 0) {
+                            const sessionRate = (actualSessions / targetSessions) * 100;
+                            const participantRate = targetParticipants > 0 ? (actualParticipants / targetParticipants) * 100 : 0;
+                            // 회기수와 인원 달성률의 평균 (또는 더 적절한 가중치 적용 가능)
+                            achievementRate = ((sessionRate + participantRate) / 2).toFixed(1);
+                        } else if (targetSessions > 0) {
+                            achievementRate = ((actualSessions / targetSessions) * 100).toFixed(1);
+                        } else if (actualSessions > 0) {
+                            achievementRate = '100.0';
+                        }
+
+                        totalTargetSessions += targetSessions;
+                        totalActualSessions += actualSessions;
+                        totalTargetParticipants += targetParticipants;
+                        totalActualParticipants += actualParticipants;
+                        totalRecipients += recipients;
+                        totalGeneral += general;
+
+                        html += `
+                            <tr>
+                                <td>${activity}</td>
+                                <td>${targetSessions}</td>
+                                <td>${actualSessions}</td>
+                                <td>${targetParticipants}</td>
+                                <td>${actualParticipants}</td>
+                                <td>${recipients}</td>
+                                <td>${general}</td>
+                                <td>${achievementRate}%</td>
+                            </tr>
+                        `;
+                    });
+
+                    // 전체 달성률 계산
+                    let overallAchievementRate = 0;
+                    if (totalTargetSessions > 0 && totalTargetParticipants > 0) {
+                        const sessionRate = (totalActualSessions / totalTargetSessions) * 100;
+                        const participantRate = (totalActualParticipants / totalTargetParticipants) * 100;
+                        overallAchievementRate = ((sessionRate + participantRate) / 2).toFixed(1);
+                    } else if (totalTargetSessions > 0) {
+                        overallAchievementRate = ((totalActualSessions / totalTargetSessions) * 100).toFixed(1);
+                    } else if (totalActualSessions > 0) {
+                        overallAchievementRate = '100.0';
+                    }
+
+                    html += `
+                            <tr class="total-row">
+                                <td>합계</td>
+                                <td>${totalTargetSessions}</td>
+                                <td>${totalActualSessions}</td>
+                                <td>${totalTargetParticipants}</td>
+                                <td>${totalActualParticipants}</td>
+                                <td>${totalRecipients}</td>
+                                <td>${totalGeneral}</td>
+                                <td>${overallAchievementRate}%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    `;
+                });
+
+                div.innerHTML = html;
+            },
+
+            // 월별 실적 업데이트
+            updateMonthlyPerformance: function () {
+                const div = document.getElementById('monthlyPerformance');
+                if (!this.performanceData.length) {
+                    div.innerHTML = '';
+                    return;
+                }
+
+                const programs = [...new Set(this.performanceData.map(item => item.program))];
+                let html = '';
+
+                programs.forEach(program => {
+                    const monthlyData = Array(12).fill(0).map(() => ({ sessions: 0, recipients: 0, general: 0, total: 0 }));
+                    let yearTotal = { sessions: 0, recipients: 0, general: 0, total: 0 };
+
+                    this.performanceData.filter(item => item.program === program).forEach(item => {
+                        const monthIndex = item.month - 1;
+                        monthlyData[monthIndex].sessions += 1;
+                        monthlyData[monthIndex].recipients += item.recipients;
+                        monthlyData[monthIndex].general += item.general;
+                        monthlyData[monthIndex].total += item.total;
+                    });
+
+                    monthlyData.forEach(month => {
+                        yearTotal.sessions += month.sessions;
+                        yearTotal.recipients += month.recipients;
+                        yearTotal.general += month.general;
+                        yearTotal.total += month.total;
+                    });
+
+                    html += `
+                        <table class="summary-table">
+                            <thead>
+                                <tr class="program-header">
+                                    <th colspan="14">${program}</th>
+                                </tr>
+                                <tr>
+                                    <th>구분</th>
+                                    <th>1월</th>
+                                    <th>2월</th>
+                                    <th>3월</th>
+                                    <th>4월</th>
+                                    <th>5월</th>
+                                    <th>6월</th>
+                                    <th>7월</th>
+                                    <th>8월</th>
+                                    <th>9월</th>
+                                    <th>10월</th>
+                                    <th>11월</th>
+                                    <th>12월</th>
+                                    <th>합계</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>회기수</td>
+                                    ${monthlyData.map(month => `<td>${month.sessions}</td>`).join('')}
+                                    <td>${yearTotal.sessions}</td>
+                                </tr>
+                                <tr>
+                                    <td>수급자</td>
+                                    ${monthlyData.map(month => `<td>${month.recipients}</td>`).join('')}
+                                    <td>${yearTotal.recipients}</td>
+                                </tr>
+                                <tr>
+                                    <td>일반</td>
+                                    ${monthlyData.map(month => `<td>${month.general}</td>`).join('')}
+                                    <td>${yearTotal.general}</td>
+                                </tr>
+                                <tr class="total-row">
+                                    <td>총 인원</td>
+                                    ${monthlyData.map(month => `<td>${month.total}</td>`).join('')}
+                                    <td>${yearTotal.total}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    `;
+                });
+
+                div.innerHTML = html;
+            },
+
+            // 분기별 실적 업데이트
+            updateQuarterlyPerformance: function () {
+                const div = document.getElementById('quarterlyPerformance');
+                if (!this.performanceData.length) {
+                    div.innerHTML = '';
+                    return;
+                }
+
+                const programs = [...new Set(this.performanceData.map(item => item.program))];
+                let html = '';
+
+                programs.forEach(program => {
+                    const quarterlyData = Array(4).fill(0).map(() => ({ sessions: 0, recipients: 0, general: 0, total: 0 }));
+                    let yearTotal = { sessions: 0, recipients: 0, general: 0, total: 0 };
+
+                    this.performanceData.filter(item => item.program === program).forEach(item => {
+                        const quarterIndex = Math.floor((item.month - 1) / 3);
+                        quarterlyData[quarterIndex].sessions += 1;
+                        quarterlyData[quarterIndex].recipients += item.recipients;
+                        quarterlyData[quarterIndex].general += item.general;
+                        quarterlyData[quarterIndex].total += item.total;
+                    });
+
+                    quarterlyData.forEach(quarter => {
+                        yearTotal.sessions += quarter.sessions;
+                        yearTotal.recipients += quarter.recipients;
+                        yearTotal.general += quarter.general;
+                        yearTotal.total += quarter.total;
+                    });
+
+                    html += `
+                        <table class="summary-table">
+                            <thead>
+                                <tr class="program-header">
+                                    <th colspan="6">${program}</th>
+                                </tr>
+                                <tr>
+                                    <th>구분</th>
+                                    <th>1분기</th>
+                                    <th>2분기</th>
+                                    <th>3분기</th>
+                                    <th>4분기</th>
+                                    <th>합계</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>회기수</td>
+                                    ${quarterlyData.map(quarter => `<td>${quarter.sessions}</td>`).join('')}
+                                    <td>${yearTotal.sessions}</td>
+                                </tr>
+                                <tr>
+                                    <td>수급자</td>
+                                    ${quarterlyData.map(quarter => `<td>${quarter.recipients}</td>`).join('')}
+                                    <td>${yearTotal.recipients}</td>
+                                </tr>
+                                <tr>
+                                    <td>일반</td>
+                                    ${quarterlyData.map(quarter => `<td>${quarter.general}</td>`).join('')}
+                                    <td>${yearTotal.general}</td>
+                                </tr>
+                                <tr class="total-row">
+                                    <td>총 인원</td>
+                                    ${quarterlyData.map(quarter => `<td>${quarter.total}</td>`).join('')}
+                                    <td>${yearTotal.total}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    `;
+                });
+
+                div.innerHTML = html;
+            },
+
+            // 예산 사용 현황 업데이트
+            updateBudgetSummary: function () {
+                const div = document.getElementById('budgetSummary');
+                if (!this.budgetPlanData.length) {
+                    div.innerHTML = '';
+                    return;
+                }
+
+                const programs = [...new Set(this.budgetPlanData.map(item => item.program))];
+                let html = '';
+
+                programs.forEach(program => {
+                    const programBudgetPlan = this.budgetPlanData.filter(item => item.program === program);
+                    const activities = [...new Set(programBudgetPlan.map(item => item.activity))];
+
+                    html += `
+                        <table class="summary-table">
+                            <thead>
+                                <tr class="program-header">
+                                    <th colspan="6">${program}</th>
+                                </tr>
+                                <tr>
+                                    <th>세부활동</th>
+                                    <th>예산 항목</th>
+                                    <th>예산</th>
+                                    <th>사용금액</th>
+                                    <th>잔여 예산</th>
+                                    <th>사용률</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+
+                    let programTotalPlanned = 0;
+                    let programTotalUsed = 0;
+
+                    activities.forEach(activity => {
+                        const activityBudgetPlan = programBudgetPlan.filter(item => item.activity === activity);
+                        activityBudgetPlan.forEach((planItem, index) => {
+                            // 현재 예산 사용 데이터에서 최신 사용금액을 계산
+                            const usedAmount = this.budgetData
+                                .filter(item => item.program === program && item.activity === activity && item.item === planItem.item)
+                                .reduce((sum, item) => sum + item.amount, 0);
+
+                            const remainingAmount = planItem.amount - usedAmount;
+                            const usageRate = planItem.amount > 0 ? ((usedAmount / planItem.amount) * 100).toFixed(1) : 0;
+
+                            programTotalPlanned += planItem.amount;
+                            programTotalUsed += usedAmount;
+
+                            html += `
+                                <tr>
+                                    ${index === 0 ? `<td rowspan="${activityBudgetPlan.length}">${activity}</td>` : ''}
+                                    <td>${planItem.item}</td>
+                                    <td>${planItem.amount.toLocaleString()}원</td>
+                                    <td>${usedAmount.toLocaleString()}원</td>
+                                    <td>${remainingAmount.toLocaleString()}원</td>
+                                    <td>${usageRate}%</td>
+                                </tr>
+                            `;
+                        });
+                    });
+
+                    const programRemainingBudget = programTotalPlanned - programTotalUsed;
+                    const programUsageRate = programTotalPlanned > 0 ?
+                        ((programTotalUsed / programTotalPlanned) * 100).toFixed(1) : 0;
+
+                    html += `
+                            <tr class="total-row">
+                                <td colspan="2">합계</td>
+                                <td>${programTotalPlanned.toLocaleString()}원</td>
+                                <td>${programTotalUsed.toLocaleString()}원</td>
+                                <td>${programRemainingBudget.toLocaleString()}원</td>
+                                <td>${programUsageRate}%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    `;
+                });
+
+                div.innerHTML = html;
+            },
+
+            // 월별 예산 사용 현황 업데이트
+            updateMonthlyBudget: function () {
+                const div = document.getElementById('monthlyBudget');
+                if (!this.budgetData.length) {
+                    div.innerHTML = '';
+                    return;
+                }
+
+                const programs = [...new Set(this.budgetData.map(item => item.program))];
+                let html = '';
+
+                programs.forEach(program => {
+                    const monthlyData = Array(12).fill(0);
+                    let yearTotal = 0;
+
+                    this.budgetData.filter(item => item.program === program).forEach(item => {
+                        const monthIndex = item.month - 1;
+                        monthlyData[monthIndex] += item.amount;
+                    });
+
+                    yearTotal = monthlyData.reduce((sum, amount) => sum + amount, 0);
+
+                    html += `
+                        <table class="summary-table">
+                            <thead>
+                                <tr class="program-header">
+                                    <th colspan="14">${program}</th>
+                                </tr>
+                                <tr>
+                                    <th>월</th>
+                                    <th>1월</th>
+                                    <th>2월</th>
+                                    <th>3월</th>
+                                    <th>4월</th>
+                                    <th>5월</th>
+                                    <th>6월</th>
+                                    <th>7월</th>
+                                    <th>8월</th>
+                                    <th>9월</th>
+                                    <th>10월</th>
+                                    <th>11월</th>
+                                    <th>12월</th>
+                                    <th>합계</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>사용금액</td>
+                                    ${monthlyData.map(amount => `<td>${amount.toLocaleString()}원</td>`).join('')}
+                                    <td>${yearTotal.toLocaleString()}원</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    `;
+                });
+
+                div.innerHTML = html;
+            },
+
+            // 분기별 예산 사용 현황 업데이트
+            updateQuarterlyBudget: function () {
+                const div = document.getElementById('quarterlyBudget');
+                if (!this.budgetData.length) {
+                    div.innerHTML = '';
+                    return;
+                }
+
+                const programs = [...new Set(this.budgetData.map(item => item.program))];
+                let html = '';
+
+                programs.forEach(program => {
+                    const quarterlyData = Array(4).fill(0);
+                    let yearTotal = 0;
+
+                    this.budgetData.filter(item => item.program === program).forEach(item => {
+                        const quarterIndex = Math.floor((item.month - 1) / 3);
+                        quarterlyData[quarterIndex] += item.amount;
+                    });
+
+                    yearTotal = quarterlyData.reduce((sum, amount) => sum + amount, 0);
+
+                    html += `
+                        <table class="summary-table">
+                            <thead>
+                                <tr class="program-header">
+                                    <th colspan="6">${program}</th>
+                                </tr>
+                                <tr>
+                                    <th>분기</th>
+                                    <th>1분기</th>
+                                    <th>2분기</th>
+                                    <th>3분기</th>
+                                    <th>4분기</th>
+                                    <th>합계</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>사용금액</td>
+                                    ${quarterlyData.map(amount => `<td>${amount.toLocaleString()}원</td>`).join('')}
+                                    <td>${yearTotal.toLocaleString()}원</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    `;
+                });
+
+                div.innerHTML = html;
+            },
+
+            // 실적 로그 업데이트
+            updatePerformanceLog: function () {
+                const tbody = document.getElementById('performanceLog');
+                tbody.innerHTML = '';
+
+                this.performanceData.sort((a, b) => {
+                    if (a.month !== b.month) return a.month - b.month;
+                    return a.day - b.day;
+                }).forEach(item => {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${item.month}</td>
+                            <td>${item.day}</td>
+                            <td>${item.program}</td>
+                            <td>${item.activity}</td>
+                            <td>${item.recipients}</td>
+                            <td>${item.general}</td>
+                            <td>${item.total}</td>
+                            <td><button class="btn-edit" onclick="app.editPerformance(${item.id})">수정</button></td>
+                            <td><button class="delete-btn" onclick="app.deletePerformance(${item.id})">삭제</button></td>
+                        </tr>
+                    `;
+                });
+            },
+
+            // 예산 로그 업데이트
+            updateBudgetLog: function () {
+                const tbody = document.getElementById('budgetLog');
+                tbody.innerHTML = '';
+
+                this.budgetData.sort((a, b) => {
+                    if (a.month !== b.month) return a.month - b.month;
+                    return a.day - b.day;
+                }).forEach(item => {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${item.month}</td>
+                            <td>${item.day}</td>
+                            <td>${item.program}</td>
+                            <td>${item.activity}</td>
+                            <td>${item.item}</td>
+                            <td>${item.amount.toLocaleString()}원</td>
+                            <td><button class="btn-edit" onclick="app.editBudget(${item.id})">수정</button></td>
+                            <td><button class="delete-btn" onclick="app.deleteBudget(${item.id})">삭제</button></td>
+                        </tr>
+                    `;
+                });
+            },
+
+            // 편집 함수들
+            editTarget: function (id) {
+                const item = this.targetData.find(item => item.id === id);
+                if (item) {
+                    document.getElementById('targetProgram').value = item.program;
+                    document.getElementById('targetActivity').value = item.activity;
+                    document.getElementById('targetSessions').value = item.sessions;
+                    document.getElementById('targetParticipants').value = item.participants;
+                    this.deleteTarget(id);
+                }
+            },
+
+            editBudgetPlan: function (id) {
+                const item = this.budgetPlanData.find(item => item.id === id);
+                if (item) {
+                    document.getElementById('budgetProgramInput').value = item.program;
+                    document.getElementById('budgetActivityInput').value = item.activity;
+                    document.getElementById('budgetItemInput').value = item.item;
+                    document.getElementById('budgetAmountInput').value = item.amount;
+                    this.deleteBudgetPlan(id);
+                }
+            },
+
+            editPerformance: function (id) {
+                const item = this.performanceData.find(item => item.id === id);
+                if (item) {
+                    document.getElementById('month').value = item.month;
+                    document.getElementById('day').value = item.day;
+                    document.getElementById('program').value = item.program;
+                    this.updateActivities();
+                    setTimeout(() => {
+                        document.getElementById('activity').value = item.activity;
+                    }, 100);
+                    document.getElementById('recipientCount').value = item.recipients;
+                    document.getElementById('generalCount').value = item.general;
+                    this.deletePerformance(id);
+                }
+            },
+
+            editBudget: function (id) {
+                const item = this.budgetData.find(item => item.id === id);
+                if (item) {
+                    document.getElementById('budgetMonth').value = item.month;
+                    document.getElementById('budgetDay').value = item.day;
+                    document.getElementById('budgetProgram').value = item.program;
+                    this.updateBudgetActivities();
+                    setTimeout(() => {
+                        document.getElementById('budgetActivity').value = item.activity;
+                        this.updateBudgetItems();
+                        setTimeout(() => {
+                            document.getElementById('budgetItem').value = item.item;
+                        }, 100);
+                    }, 100);
+                    document.getElementById('budgetAmount').value = item.amount;
+                    this.deleteBudget(id);
+                }
+            },
+
+            // 삭제 함수들 - 수정된 버전
+            deleteTarget: function (id) {
+                this.targetData = this.targetData.filter(item => item.id !== id);
+                this.updateAllTables();
+                this.refreshAllTabData(); // 다른 탭들도 업데이트
+                this.autoSave();
+            },
+
+            deleteBudgetPlan: function (id) {
+                this.budgetPlanData = this.budgetPlanData.filter(item => item.id !== id);
+                this.updateAllTables();
+                this.refreshAllTabData(); // 다른 탭들도 업데이트
+                this.autoSave();
+            },
+
+            deletePerformance: function (id) {
+                this.performanceData = this.performanceData.filter(item => item.id !== id);
+                this.updateAllTables();
+                this.refreshAllTabData(); // 다른 탭들도 업데이트
+                this.autoSave();
+            },
+
+            deleteBudget: function (id) {
+                this.budgetData = this.budgetData.filter(item => item.id !== id);
+                this.updateAllTables();
+                this.refreshAllTabData(); // 다른 탭들도 업데이트
+                this.autoSave();
+            }
+        };
+
+        // 페이지 로드 시 초기화
+        document.addEventListener('DOMContentLoaded', () => {
+            // 저장된 데이터 불러오기
+            app.loadAllData();
+            // 테이블 업데이트
+            app.updateAllTables();
+        });
+
+        // 브라우저 종료 시 자동 저장
+        window.addEventListener('beforeunload', function () {
+            app.saveAllData();
+        });
+    </script>
+</body>
+
+</html>
