@@ -611,13 +611,10 @@
                             <button class="btn" onclick="app.importFromCSV()">📥 CSV에서 가져오기</button>
                         </div>
                         <div class="form-row" style="margin-top: 10px;">
-                            <button class="btn" onclick="app.exportToGoogleSheets()" id="googleExportBtn">📤 구글 시트로
-                                내보내기</button>
-                            <button class="btn" onclick="app.importFromGoogleSheets()" id="googleImportBtn">📥 구글 시트에서
-                                가져오기</button>
+                            <button class="btn" onclick="app.exportToGoogleSheets()" id="googleExportBtn">📤 구글 시트로 내보내기</button>
+                            <button class="btn" onclick="app.importFromGoogleSheets()" id="googleImportBtn">📥 구글 시트에서 가져오기</button>
                         </div>
-                        <input type="file" id="csvFileInput" accept=".csv" style="display: none;"
-                            onchange="app.handleCSVFile(event)">
+                        <input type="file" id="csvFileInput" accept=".csv" style="display: none;" onchange="app.handleCSVFile(event)">
                     </div>
 
                     <table class="data-table">
@@ -674,7 +671,7 @@
             budgetData: [],
 
             // 탭 전환 함수 - 수정된 버전
-            switchTab: function (tabName, element) {
+            switchTab: function(tabName, element) {
                 document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
                 document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
 
@@ -687,7 +684,7 @@
             },
 
             // 저장 기능
-            saveAllData: function () {
+            saveAllData: function() {
                 try {
                     this.showSaveStatus();
                     console.log('데이터가 성공적으로 저장되었습니다.');
@@ -697,7 +694,7 @@
                 }
             },
 
-            showSaveStatus: function () {
+            showSaveStatus: function() {
                 const saveStatus = document.getElementById('saveStatus');
                 saveStatus.style.display = 'block';
                 setTimeout(() => {
@@ -705,12 +702,12 @@
                 }, 2000);
             },
 
-            autoSave: function () {
+            autoSave: function() {
                 this.saveAllData();
             },
 
             // 목표 데이터 추가 - 수정된 버전
-            addTargetData: function () {
+            addTargetData: function() {
                 const program = document.getElementById('targetProgram').value.trim();
                 const activity = document.getElementById('targetActivity').value.trim();
                 const sessions = parseInt(document.getElementById('targetSessions').value) || 0;
@@ -746,7 +743,7 @@
             },
 
             // 예산 계획 추가 - 수정된 버전
-            addBudgetPlan: function () {
+            addBudgetPlan: function() {
                 const program = document.getElementById('budgetProgramInput').value.trim();
                 const activity = document.getElementById('budgetActivityInput').value.trim();
                 const item = document.getElementById('budgetItemInput').value.trim();
@@ -773,7 +770,7 @@
             },
 
             // 모든 탭 데이터 새로고침
-            refreshAllTabData: function () {
+            refreshAllTabData: function() {
                 // 현재 활성화된 탭과 상관없이 모든 탭의 데이터를 업데이트
                 this.updatePerformanceSummary();
                 this.updateMonthlyPerformance();
@@ -787,7 +784,7 @@
             },
 
             // 실적 데이터 추가
-            addPerformanceData: function () {
+            addPerformanceData: function() {
                 const month = parseInt(document.getElementById('month').value);
                 const day = parseInt(document.getElementById('day').value);
                 const program = document.getElementById('program').value;
@@ -817,7 +814,7 @@
             },
 
             // 예산 사용 데이터 추가
-            addBudgetData: function () {
+            addBudgetData: function() {
                 const month = parseInt(document.getElementById('budgetMonth').value);
                 const day = parseInt(document.getElementById('budgetDay').value);
                 const program = document.getElementById('budgetProgram').value;
@@ -846,21 +843,21 @@
             },
 
             // 폼 초기화 함수들
-            clearTargetForm: function () {
+            clearTargetForm: function() {
                 document.getElementById('targetProgram').value = '';
                 document.getElementById('targetActivity').value = '';
                 document.getElementById('targetSessions').value = '';
                 document.getElementById('targetParticipants').value = '';
             },
 
-            clearBudgetPlanForm: function () {
+            clearBudgetPlanForm: function() {
                 document.getElementById('budgetProgramInput').value = '';
                 document.getElementById('budgetActivityInput').value = '';
                 document.getElementById('budgetItemInput').value = '';
                 document.getElementById('budgetAmountInput').value = '';
             },
 
-            clearPerformanceForm: function () {
+            clearPerformanceForm: function() {
                 document.getElementById('month').value = '';
                 document.getElementById('day').value = '';
                 document.getElementById('program').value = '';
@@ -869,7 +866,7 @@
                 document.getElementById('generalCount').value = '0';
             },
 
-            clearBudgetForm: function () {
+            clearBudgetForm: function() {
                 document.getElementById('budgetMonth').value = '';
                 document.getElementById('budgetDay').value = '';
                 document.getElementById('budgetProgram').value = '';
@@ -879,7 +876,7 @@
             },
 
             // 프로그램 선택 옵션 업데이트
-            updateProgramSelects: function () {
+            updateProgramSelects: function() {
                 const programs = [...new Set([...this.targetData, ...this.budgetPlanData].map(item => item.program))];
 
                 const programSelect = document.getElementById('program');
@@ -895,7 +892,7 @@
             },
 
             // 활동 옵션 업데이트
-            updateActivities: function () {
+            updateActivities: function() {
                 const selectedProgram = document.getElementById('program').value;
                 const activitySelect = document.getElementById('activity');
 
@@ -912,7 +909,7 @@
                 }
             },
 
-            updateBudgetActivities: function () {
+            updateBudgetActivities: function() {
                 const selectedProgram = document.getElementById('budgetProgram').value;
                 const activitySelect = document.getElementById('budgetActivity');
 
@@ -929,7 +926,7 @@
                 }
             },
 
-            updateBudgetItems: function () {
+            updateBudgetItems: function() {
                 const selectedProgram = document.getElementById('budgetProgram').value;
                 const selectedActivity = document.getElementById('budgetActivity').value;
                 const itemSelect = document.getElementById('budgetItem');
@@ -948,7 +945,7 @@
             },
 
             // 모든 테이블 업데이트
-            updateAllTables: function () {
+            updateAllTables: function() {
                 this.updateProgramSelects();
                 this.updateTargetLog();
                 this.updateBudgetPlanLog();
@@ -965,7 +962,7 @@
             },
 
             // 목표 로그 업데이트
-            updateTargetLog: function () {
+            updateTargetLog: function() {
                 const tbody = document.getElementById('targetLog');
                 tbody.innerHTML = '';
 
@@ -986,7 +983,7 @@
             },
 
             // 예산 계획 로그 업데이트
-            updateBudgetPlanLog: function () {
+            updateBudgetPlanLog: function() {
                 const tbody = document.getElementById('budgetPlanLog');
                 tbody.innerHTML = '';
 
@@ -1007,7 +1004,7 @@
             },
 
             // 목표 요약 업데이트
-            updateTargetSummary: function () {
+            updateTargetSummary: function() {
                 const div = document.getElementById('targetSummary');
                 if (!this.targetData.length) {
                     div.innerHTML = '';
@@ -1067,7 +1064,7 @@
             },
 
             // 예산 계획 요약 업데이트
-            updateBudgetPlanSummary: function () {
+            updateBudgetPlanSummary: function() {
                 const div = document.getElementById('budgetPlanSummary');
                 if (!this.budgetPlanData.length) {
                     div.innerHTML = '';
@@ -1128,7 +1125,7 @@
             },
 
             // 실적 요약 업데이트
-            updatePerformanceSummary: function () {
+            updatePerformanceSummary: function() {
                 const div = document.getElementById('performanceSummary');
                 if (!this.performanceData.length) {
                     div.innerHTML = '';
@@ -1250,7 +1247,7 @@
             },
 
             // 월별 실적 업데이트
-            updateMonthlyPerformance: function () {
+            updateMonthlyPerformance: function() {
                 const div = document.getElementById('monthlyPerformance');
                 if (!this.performanceData.length) {
                     div.innerHTML = '';
@@ -1332,7 +1329,7 @@
             },
 
             // 분기별 실적 업데이트
-            updateQuarterlyPerformance: function () {
+            updateQuarterlyPerformance: function() {
                 const div = document.getElementById('quarterlyPerformance');
                 if (!this.performanceData.length) {
                     div.innerHTML = '';
@@ -1406,7 +1403,7 @@
             },
 
             // 예산 사용 현황 업데이트
-            updateBudgetSummary: function () {
+            updateBudgetSummary: function() {
                 const div = document.getElementById('budgetSummary');
                 if (!this.budgetPlanData.length) {
                     div.innerHTML = '';
@@ -1489,7 +1486,7 @@
             },
 
             // 월별 예산 사용 현황 업데이트
-            updateMonthlyBudget: function () {
+            updateMonthlyBudget: function() {
                 const div = document.getElementById('monthlyBudget');
                 if (!this.budgetData.length) {
                     div.innerHTML = '';
@@ -1548,7 +1545,7 @@
             },
 
             // 분기별 예산 사용 현황 업데이트
-            updateQuarterlyBudget: function () {
+            updateQuarterlyBudget: function() {
                 const div = document.getElementById('quarterlyBudget');
                 if (!this.budgetData.length) {
                     div.innerHTML = '';
@@ -1599,7 +1596,7 @@
             },
 
             // 실적 로그 업데이트
-            updatePerformanceLog: function () {
+            updatePerformanceLog: function() {
                 const tbody = document.getElementById('performanceLog');
                 tbody.innerHTML = '';
 
@@ -1624,7 +1621,7 @@
             },
 
             // 예산 로그 업데이트
-            updateBudgetLog: function () {
+            updateBudgetLog: function() {
                 const tbody = document.getElementById('budgetLog');
                 tbody.innerHTML = '';
 
@@ -1648,7 +1645,7 @@
             },
 
             // 편집 함수들
-            editTarget: function (id) {
+            editTarget: function(id) {
                 const item = this.targetData.find(item => item.id === id);
                 if (item) {
                     document.getElementById('targetProgram').value = item.program;
@@ -1659,7 +1656,7 @@
                 }
             },
 
-            editBudgetPlan: function (id) {
+            editBudgetPlan: function(id) {
                 const item = this.budgetPlanData.find(item => item.id === id);
                 if (item) {
                     document.getElementById('budgetProgramInput').value = item.program;
@@ -1670,7 +1667,7 @@
                 }
             },
 
-            editPerformance: function (id) {
+            editPerformance: function(id) {
                 const item = this.performanceData.find(item => item.id === id);
                 if (item) {
                     document.getElementById('month').value = item.month;
@@ -1686,7 +1683,7 @@
                 }
             },
 
-            editBudget: function (id) {
+            editBudget: function(id) {
                 const item = this.budgetData.find(item => item.id === id);
                 if (item) {
                     document.getElementById('budgetMonth').value = item.month;
@@ -1706,28 +1703,28 @@
             },
 
             // 삭제 함수들 - 수정된 버전
-            deleteTarget: function (id) {
+            deleteTarget: function(id) {
                 this.targetData = this.targetData.filter(item => item.id !== id);
                 this.updateAllTables();
                 this.refreshAllTabData(); // 다른 탭들도 업데이트
                 this.autoSave();
             },
 
-            deleteBudgetPlan: function (id) {
+            deleteBudgetPlan: function(id) {
                 this.budgetPlanData = this.budgetPlanData.filter(item => item.id !== id);
                 this.updateAllTables();
                 this.refreshAllTabData(); // 다른 탭들도 업데이트
                 this.autoSave();
             },
 
-            deletePerformance: function (id) {
+            deletePerformance: function(id) {
                 this.performanceData = this.performanceData.filter(item => item.id !== id);
                 this.updateAllTables();
                 this.refreshAllTabData(); // 다른 탭들도 업데이트
                 this.autoSave();
             },
 
-            deleteBudget: function (id) {
+            deleteBudget: function(id) {
                 this.budgetData = this.budgetData.filter(item => item.id !== id);
                 this.updateAllTables();
                 this.refreshAllTabData(); // 다른 탭들도 업데이트
@@ -1744,7 +1741,7 @@
         });
 
         // 브라우저 종료 시 자동 저장
-        window.addEventListener('beforeunload', function () {
+        window.addEventListener('beforeunload', function() {
             app.saveAllData();
         });
     </script>
